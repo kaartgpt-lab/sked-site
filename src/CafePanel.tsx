@@ -48,7 +48,7 @@ const emptyForm: Cafe = {
   status: "ACTIVE",
 };
 
-const API_BASE = "/api/cafes";
+const API_BASE = "";
 
 export default function CafeAdminPage() {
   const [cafes, setCafes] = useState<Cafe[]>([]);
@@ -62,30 +62,30 @@ export default function CafeAdminPage() {
   const [imagesInput, setImagesInput] = useState("");
 
   // Fetch all cafes
-  //   useEffect(() => {
-  //     (async () => {
-  //       setLoading(true);
-  //       setError(null);
-  //       try {
-  //         const res = await fetch(API_BASE, { cache: "no-store" });
-  //         if (!res.ok) throw new Error(`Failed to fetch cafes (${res.status})`);
-  //         const data = (await res.json()) as Cafe[];
-  //         // Normalize types: ensure bookingPrice is string
-  //         const normalized = data.map((c) => ({
-  //           ...c,
-  //           bookingPrice:
-  //             typeof (c as any).bookingPrice === "number"
-  //               ? String((c as any).bookingPrice)
-  //               : (c as any).bookingPrice ?? "0",
-  //         }));
-  //         setCafes(normalized);
-  //       } catch (e: any) {
-  //         setError(e.message || "Something went wrong.");
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     })();
-  //   }, []);
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(API_BASE, { cache: "no-store" });
+        if (!res.ok) throw new Error(`Failed to fetch cafes (${res.status})`);
+        const data = (await res.json()) as Cafe[];
+        // Normalize types: ensure bookingPrice is string
+        const normalized = data.map((c) => ({
+          ...c,
+          bookingPrice:
+            typeof (c as any).bookingPrice === "number"
+              ? String((c as any).bookingPrice)
+              : (c as any).bookingPrice ?? "0",
+        }));
+        setCafes(normalized);
+      } catch (e: any) {
+        setError(e.message || "Something went wrong.");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   // Filtered list by search query
   const filtered = useMemo(() => {
