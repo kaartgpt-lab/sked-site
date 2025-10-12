@@ -48,7 +48,28 @@ const emptyForm: Cafe = {
   status: "ACTIVE",
 };
 
-const API_BASE = "";
+const API_BASE = "/api/cafes"; // points to Vercel serverless API route
+
+// Fallback mock data (for deploy/testing)
+const MOCK_CAFES: Cafe[] = [
+  {
+    id: "1",
+    cafeId: "cafe001",
+    name: "Demo Cafe",
+    tags: ["wifi", "quiet"],
+    images: ["/assets/demo-cafe.jpg"], // put demo image in public/assets/
+    description: "This is a demo cafe description",
+    startTime: "09:00",
+    endTime: "21:00",
+    latitude: 0,
+    longitude: 0,
+    bookingPrice: "199",
+    city: "City",
+    state: "State",
+    pincode: "123456",
+    status: "ACTIVE",
+  },
+];
 
 export default function CafeAdminPage() {
   const [cafes, setCafes] = useState<Cafe[]>([]);
@@ -61,16 +82,20 @@ export default function CafeAdminPage() {
   const [tagsInput, setTagsInput] = useState("");
   const [imagesInput, setImagesInput] = useState("");
 
-  // Fetch all cafes
   useEffect(() => {
     (async () => {
       setLoading(true);
       setError(null);
       try {
+        // If API_BASE is empty, skip fetch and use mock
+        if (!API_BASE) {
+          setCafes(MOCK_CAFES);
+          return;
+        }
+
         const res = await fetch(API_BASE, { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed to fetch cafes (${res.status})`);
         const data = (await res.json()) as Cafe[];
-        // Normalize types: ensure bookingPrice is string
         const normalized = data.map((c) => ({
           ...c,
           bookingPrice:
@@ -80,6 +105,8 @@ export default function CafeAdminPage() {
         }));
         setCafes(normalized);
       } catch (e: any) {
+        console.warn("Using fallback mock cafes:", e.message);
+        setCafes(MOCK_CAFES); // fallback to demo
         setError(e.message || "Something went wrong.");
       } finally {
         setLoading(false);
