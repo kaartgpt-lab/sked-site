@@ -1,23 +1,13 @@
-import Header from "./components/Header";
-import Intro from "./components/Intro";
-import Hero from "./components/Hero";
-import MembershipDetails from "./components/MembershipDetails";
-import CommunityAndApp from "./components/CommunityAndApp";
-import Communities from "./components/Communities";
-import ApplyForm from "./components/ApplyForm";
-import Footer from "./components/Footer";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SkedClub from "./pages/SkedClub";
 
-export default function App() {
-  return (
-    <div className="text-zinc-900 bg-white">
-      <Header />
-      <Intro />
-      <Hero />
-      <MembershipDetails />
-      <CommunityAndApp />
-      <Communities />
-      <ApplyForm />
-      <Footer />
-    </div>
-  );
-}
+const App: React.FC = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<SkedClub />} />
+    </Routes>
+  </BrowserRouter>
+);
+
+export default App;
